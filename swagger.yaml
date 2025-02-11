@@ -101,6 +101,105 @@ paths:
         '204':
           description: Пост удален
 
+    /reviews:
+    get:
+      summary: Получить все отзывы
+      description: Возвращает список всех отзывов.
+      operationId: getReviews
+      responses:
+        '200':
+          description: Список отзывов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+
+    post:
+      summary: Добавить новый отзыв
+      description: Создает новый отзыв о сервисе.
+      operationId: createReview
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewCreate'
+      responses:
+        '201':
+          description: Отзыв успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+
+  /reviews/{id}:
+    get:
+      summary: Получить отзыв по ID
+      description: Возвращает отзыв по указанному ID.
+      operationId: getReviewById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID отзыва
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Отзыв найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '404':
+          description: Отзыв не найден
+
+    put:
+      summary: Обновить отзыв
+      description: Обновляет информацию о существующем отзыве.
+      operationId: updateReview
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID отзыва
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewUpdate'
+      responses:
+        '200':
+          description: Отзыв обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '404':
+          description: Отзыв не найден
+
+    delete:
+      summary: Удалить отзыв
+      description: Удаляет отзыв по указанному ID.
+      operationId: deleteReview
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID отзыва
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Отзыв удален
+        '404':
+          description: Отзыв не найден
+
 components:
   schemas:
     Post:
@@ -126,3 +225,72 @@ components:
           type: string
         content:
           type: string
+
+     Review:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "12345"
+        rating:
+          type: integer
+          description: Рейтинг отзыва (от 1 до 5)
+          example: 4
+        short_description:
+          type: string
+          description: Краткое описание услуги, на которую оставлен отзыв
+          example: "Отличный сервис!"
+        full_description:
+          type: string
+          description: Полное описание отзыва
+          example: "Сервис был быстрым и качественным. Очень доволен!"
+        created_at:
+          type: string
+          format: date-time
+          description: Дата создания отзыва
+          example: "2025-02-11T10:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Дата последнего обновления отзыва
+          example: "2025-02-11T11:00:00Z"
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              example: "user_123"
+            avatar:
+              type: string
+              description: URL аватарки пользователя
+              example: "https://example.com/avatar.png"
+            first_name:
+              type: string
+              description: Имя пользователя
+              example: "Иван"
+            last_name:
+              type: string
+              description: Фамилия пользователя
+              example: "Иванов"
+            nickname:
+              type: string
+              description: Никнейм пользователя
+              example: "ivankov"
+    
+    ReviewCreate:
+      allOf:
+        - $ref: '#/components/schemas/Review'
+        - properties:
+            id:
+              type: string
+              readOnly: true
+    ReviewUpdate:
+      allOf:
+        - $ref: '#/components/schemas/Review'
+        - properties:
+            created_at:
+              type: string
+              readOnly: true
+            updated_at:
+              type: string
+              readOnly: true
