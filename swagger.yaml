@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Blog API
-  description: API для работы разработки приложения rupool.pro
+  title: Rupool.pro API
+  description: API для работы разработки фронтенд и мобильного приложения сервиса rupool.pro
   version: 1.0.0
 servers:
   - url: http://localhost:3000
