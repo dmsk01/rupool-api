@@ -1,123 +1,35 @@
 openapi: 3.0.0
 info:
   title: Blog API
-  description: API для работы с постами (CRUD + пагинация)
+  description: API для работы разработки приложения rupool.pro
   version: 1.0.0
 servers:
   - url: http://localhost:3000
     description: Локальный сервер
 
 paths:
-  /posts:
-    get:
-      summary: Получить список постов
-      parameters:
-        - name: page
-          in: query
-          description: Номер страницы
-          required: false
-          schema:
-            type: integer
-            default: 1
-        - name: limit
-          in: query
-          description: Количество постов на странице
-          required: false
-          schema:
-            type: integer
-            default: 10
-      responses:
-        '200':
-          description: Успешный ответ
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Post'
-
-    post:
-      summary: Создать новый пост
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostInput'
-      responses:
-        '201':
-          description: Пост создан
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Post'
-
-  /posts/{id}:
-    get:
-      summary: Получить пост по ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Найденный пост
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Post'
-        '404':
-          description: Пост не найден
-
-    put:
-      summary: Обновить пост по ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostInput'
-      responses:
-        '200':
-          description: Пост обновлен
-
-    delete:
-      summary: Удалить пост по ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Пост удален
-
-    /reviews:
+  # ====== REVIEWS ======
+  /reviews:
     get:
       summary: Получить все отзывы
+      tags:
+        - Отзывы
       description: Возвращает список всех отзывов.
       operationId: getReviews
       responses:
-        '200':
+        "200":
           description: Список отзывов
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Review'
+                  $ref: "#/components/schemas/Review"
 
     post:
       summary: Добавить новый отзыв
+      tags:
+        - Отзывы
       description: Создает новый отзыв о сервисе.
       operationId: createReview
       requestBody:
@@ -125,18 +37,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReviewCreate'
+              $ref: "#/components/schemas/ReviewCreate"
       responses:
-        '201':
+        "201":
           description: Отзыв успешно создан
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Review'
+                $ref: "#/components/schemas/Review"
 
   /reviews/{id}:
     get:
       summary: Получить отзыв по ID
+      tags:
+        - Отзывы
       description: Возвращает отзыв по указанному ID.
       operationId: getReviewById
       parameters:
@@ -147,17 +61,19 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Отзыв найден
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Review'
-        '404':
+                $ref: "#/components/schemas/Review"
+        "404":
           description: Отзыв не найден
 
     put:
       summary: Обновить отзыв
+      tags:
+        - Отзывы
       description: Обновляет информацию о существующем отзыве.
       operationId: updateReview
       parameters:
@@ -172,19 +88,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReviewUpdate'
+              $ref: "#/components/schemas/ReviewUpdate"
       responses:
-        '200':
+        "200":
           description: Отзыв обновлен
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Review'
-        '404':
+                $ref: "#/components/schemas/Review"
+        "404":
           description: Отзыв не найден
 
     delete:
       summary: Удалить отзыв
+      tags:
+        - Отзывы
       description: Удаляет отзыв по указанному ID.
       operationId: deleteReview
       parameters:
@@ -195,38 +113,124 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        "204":
           description: Отзыв удален
-        '404':
+        "404":
           description: Отзыв не найден
+
+  # ====== NEWS ======
+  /news:
+    get:
+      summary: Получить все новости
+      tags:
+        - Новости
+      description: Возвращает список всех новостей.
+      operationId: getAllNews
+      responses:
+        "200":
+          description: Список новостей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/News"
+
+    post:
+      summary: Добавить новую новость
+      tags:
+        - Новости
+      description: Создает новую новость.
+      operationId: createNews
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsCreate"
+      responses:
+        "201":
+          description: Новость успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/News"
+
+  /news/{id}:
+    get:
+      summary: Получить новость по ID
+      tags:
+        - Новости
+      description: Возвращает новость по указанному ID.
+      operationId: getNewsById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID новости
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Новость найдена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/News"
+        "404":
+          description: Новость не найдена
+
+    put:
+      summary: Обновить новость
+      tags:
+        - Новости
+      description: Обновляет информацию о существующей новости.
+      operationId: updateNews
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID новости
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsUpdate"
+      responses:
+        "200":
+          description: Новость обновлена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/News"
+        "404":
+          description: Новость не найдена
+
+    delete:
+      summary: Удалить новость
+      tags:
+        - Новости
+      description: Удаляет новость по указанному ID.
+      operationId: deleteNews
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID новости
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Новость удалена
+        "404":
+          description: Новость не найдена
 
 components:
   schemas:
-    Post:
-      type: object
-      properties:
-        id:
-          type: string
-          example: "1"
-        title:
-          type: string
-          example: "Мой первый пост"
-        content:
-          type: string
-          example: "Содержимое поста"
-        createdAt:
-          type: string
-          format: date-time
-    
-    PostInput:
-      type: object
-      properties:
-        title:
-          type: string
-        content:
-          type: string
-
-     Review:
+    Review:
       type: object
       properties:
         id:
@@ -276,17 +280,128 @@ components:
               type: string
               description: Никнейм пользователя
               example: "ivankov"
-    
+
     ReviewCreate:
       allOf:
-        - $ref: '#/components/schemas/Review'
+        - $ref: "#/components/schemas/Review"
         - properties:
             id:
               type: string
               readOnly: true
+
     ReviewUpdate:
       allOf:
-        - $ref: '#/components/schemas/Review'
+        - $ref: "#/components/schemas/Review"
+        - properties:
+            created_at:
+              type: string
+              readOnly: true
+            updated_at:
+              type: string
+              readOnly: true
+    
+    News:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "12345"
+        title:
+          type: string
+          description: Заголовок новости
+          example: "Заголовок новости"
+        short_description:
+          type: string
+          description: Краткое описание новости
+          example: "Краткое описание"
+        full_description:
+          type: string
+          description: Полное описание новости
+          example: "Полное описание новости, подробности."
+        created_at:
+          type: string
+          format: date-time
+          description: Дата создания новости
+          example: "2025-02-11T10:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Дата последнего обновления новости
+          example: "2025-02-11T11:00:00Z"
+        comments:
+          type: array
+          description: Список комментариев к новости
+          items:
+            $ref: "#/components/schemas/Comment"
+        views:
+          type: integer
+          description: Количество просмотров новости
+          example: 120
+        sharings:
+          type: integer
+          description: Количество репостов новости
+          example: 15
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              example: "user_123"
+            avatar:
+              type: string
+              description: URL аватарки пользователя
+              example: "https://example.com/avatar.png"
+            first_name:
+              type: string
+              description: Имя пользователя
+              example: "Иван"
+            last_name:
+              type: string
+              description: Фамилия пользователя
+              example: "Иванов"
+            nickname:
+              type: string
+              description: Никнейм пользователя
+              example: "ivankov"
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "cmt_123"
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              example: "user_124"
+            name:
+              type: string
+              example: "Мария Иванова"
+            avatar:
+              type: string
+              example: "https://example.com/avatar2.png"
+        text:
+          type: string
+          example: "Отличная новость!"
+        created_at:
+          type: string
+          format: date-time
+          description: Дата создания комментария
+          example: "2025-02-11T12:00:00Z"
+
+    NewsCreate:
+      allOf:
+        - $ref: "#/components/schemas/News"
+        - properties:
+            id:
+              type: string
+              readOnly: true
+
+    NewsUpdate:
+      allOf:
+        - $ref: "#/components/schemas/News"
         - properties:
             created_at:
               type: string
